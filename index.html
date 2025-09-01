@@ -29,7 +29,6 @@
     <link href="https://cdn.prod.website-files.com/626804b1d486a09eeea1e182/62b512aabc041a5447cd4a77_IAI%20favicon_small.png" rel="shortcut icon" type="image/x-icon"/>
     <link href="https://cdn.prod.website-files.com/626804b1d486a09eeea1e182/62b511b5ed3ca343fe2ecaaa_IAI%20favicon.png" rel="apple-touch-icon"/>
     
-    <!-- Estilos personalizados para ETHERNAI -->
     <style>
         :root {
             --primary-color: #3E85FF;
@@ -62,6 +61,35 @@
             color: var(--primary-color);
             margin-bottom: 16px;
         }
+
+        /* --- INICIO DE CAMBIOS --- */
+
+        /* 1. Agrega un desplazamiento suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 2. Pone el fondo de la barra de navegación negro */
+        .navbar1_component {
+            background-color: black;
+        }
+
+        /* 3. Hace la barra más ancha (100%) y menos alta (padding reducido) */
+        .navbar1_container {
+            max-width: 100%;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /* 4. Cambia el color del texto de los enlaces a blanco */
+        .navbar1_link {
+            color: white;
+        }
+        .navbar1_link:hover {
+            color: #cccccc; /* Color al pasar el mouse */
+        }
+        
+        /* --- FIN DE CAMBIOS --- */
     </style>
 </head>
 <body>
@@ -73,8 +101,14 @@
             </a>
             <nav role="navigation" class="navbar1_menu is-page-height-tablet w-nav-menu">
                 <div class="navbar1_menu-links">
-                    <a href="/services" class="navbar1_link w-nav-link"></a>
-                    <a href="/solutions" class="navbar1_link w-nav-link"></a>
+                    <a href="#services" class="navbar1_link w-nav-link">Services</a>
+                    <a href="#solutions" class="navbar1_link w-nav-link">Solutions</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    ```
                     <a href="/cases" class="navbar1_link w-nav-link"></a>
                     <a href="/about" class="navbar1_link w-nav-link"></a>
                     <a href="/blog" class="navbar1_link w-nav-link"></a>
@@ -459,5 +493,6 @@
 
 </body>
 </html>
+
 
 
