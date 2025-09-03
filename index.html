@@ -62,6 +62,26 @@
       width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:linear-gradient(135deg, var(--accent), var(--accent-weak)); color:#fff; font-weight:800; font-family:Montserrat
     }
     .brand span{font-weight:700; letter-spacing:.04em}
+    
+    /* Mobile menu button */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 21px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    
+    .menu-toggle span {
+      height: 3px;
+      width: 100%;
+      background-color: var(--text);
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+    
     .nav-links{display:flex; gap:18px}
     .nav-links a{color:var(--text); padding:10px 12px; border-radius:10px; transition:.2s}
     .nav-links a:hover, .nav-links a.active{background:rgba(255,255,255,.06)}
@@ -94,6 +114,11 @@
     .pulse-card{
       position:relative; padding:22px; border-radius:var(--radius); background:rgba(255,255,255,.02); overflow:hidden;
       box-shadow:var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .pulse-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
     }
     /* animated neon border */
     .pulse-card::before{
@@ -103,7 +128,10 @@
     @keyframes spinBorder{to{--angle:360deg}}
     .pulse-card h3{font-family:Montserrat; margin-bottom:.25rem}
     .pulse-card p{color:var(--muted)}
-    .pulse-img{border-radius:12px; border:1px solid rgba(255,255,255,.1)}
+    .pulse-img{border-radius:12px; border:1px solid rgba(255,255,255,.1); transition: transform 0.3s ease;}
+    .pulse-card:hover .pulse-img {
+      transform: scale(1.03);
+    }
 
     @media(min-width:900px){
       #challenge .grid{grid-template-columns:1fr 1fr}
@@ -115,7 +143,11 @@
     .sticky{position:sticky; top:calc(var(--nav-h) + 24px); border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,255,255,.08)}
     .sticky img{display:block}
     .steps{display:flex; flex-direction:column; gap:16px}
-    .step{padding:18px; border-radius:14px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06)}
+    .step{padding:18px; border-radius:14px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .step:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
     .step h4{margin:0 0 .25rem; font-family:Montserrat}
     .step p{margin:0; color:var(--muted)}
     .tag{display:inline-block; font-size:.8rem; color:#0B1220; background:var(--accent); padding:4px 10px; border-radius:999px; font-weight:700; letter-spacing:.06em}
@@ -138,32 +170,50 @@
       overflow: hidden;
       background: rgba(255,255,255,.03);
       border: 1px solid rgba(255,255,255,.08);
-      transition: transform .3s ease, box-shadow .3s ease;
+      transition: transform .4s ease, box-shadow .4s ease;
+      box-shadow: var(--shadow);
     }
     .use-case-container:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      z-index: 2;
     }
     .use-case-image {
       height: 220px;
       overflow: hidden;
+      position: relative;
+    }
+    .use-case-image::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(30,30,30,0.9), transparent);
+      pointer-events: none;
     }
     .use-case-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform .5s ease;
+      transition: transform .7s ease;
     }
     .use-case-container:hover .use-case-image img {
-      transform: scale(1.05);
+      transform: scale(1.1);
     }
     .use-case-content {
       padding: 22px;
+      position: relative;
     }
     .use-case-content h3 {
       margin-top: 0;
       color: var(--text);
       font-family: Montserrat;
+      transition: color 0.3s ease;
+    }
+    .use-case-container:hover .use-case-content h3 {
+      color: var(--accent);
     }
     .use-case-content p {
       color: var(--muted);
@@ -179,6 +229,12 @@
       border-radius: 999px;
       color: var(--muted);
       margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+    .use-case-container:hover .chip {
+      background: var(--accent);
+      color: #0B1220;
+      border-color: var(--accent);
     }
 
     @media(min-width:768px){
@@ -212,10 +268,17 @@
     }
     .contact-cta{font-size:clamp(1.6rem, 2.2vw + 1rem, 3rem); font-weight:800; font-family:Montserrat; letter-spacing:.02em; color:var(--accent); margin-bottom:22px}
     .contact-grid{display:grid; grid-template-columns:1fr; gap:18px}
-    .card{background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:18px; box-shadow:var(--shadow)}
+    .card{background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:18px; box-shadow:var(--shadow); transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
     .card h4{margin:.25rem 0 .5rem}
     .field{display:flex; flex-direction:column; gap:6px; margin:8px 0}
-    .field input,.field textarea{border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.25); color:var(--text); padding:12px 12px; border-radius:10px; outline:none}
+    .field input,.field textarea{border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.25); color:var(--text); padding:12px 12px; border-radius:10px; outline:none; transition: border-color 0.3s ease;}
+    .field input:focus,.field textarea:focus {
+      border-color: var(--accent);
+    }
     .field textarea{min-height:120px; resize:vertical}
 
     @media(min-width:960px){
@@ -226,11 +289,62 @@
     footer{padding:26px 18px; border-top:1px solid rgba(255,255,255,.08); background:#161616}
     .footer-inner{max-width:var(--maxw); margin:0 auto; display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap}
     .socials{display:flex; gap:12px}
-    .socials a{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:rgba(255,255,255,.06); color:var(--text)}
+    .socials a{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:rgba(255,255,255,.06); color:var(--text); transition: all 0.3s ease;}
+    .socials a:hover {
+      background: var(--accent);
+      color: #0C1220;
+      transform: translateY(-3px);
+    }
 
     /* Appear animations */
     .reveal{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease}
     .reveal.show{opacity:1; transform:none}
+    
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+      
+      .nav-links {
+        position: fixed;
+        top: var(--nav-h);
+        right: -100%;
+        flex-direction: column;
+        background: linear-gradient(180deg, rgba(14,14,14,.95), rgba(14,14,14,.9));
+        width: 70%;
+        height: calc(100vh - var(--nav-h));
+        padding: 2rem;
+        transition: right 0.3s ease;
+        backdrop-filter: saturate(180%) blur(16px);
+        border-left: 1px solid rgba(255,255,255,.1);
+        box-shadow: -5px 0 25px rgba(0,0,0,0.3);
+      }
+      
+      .nav-links.active {
+        right: 0;
+      }
+      
+      .nav-links a {
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255,255,255,.1);
+        border-radius: 0;
+      }
+      
+      .hero h1 {
+        margin-top: 1rem;
+      }
+      
+      .cta {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -251,6 +365,13 @@
         <div class="logo" aria-hidden="true">Æ</div>
         <span>EthernAI</span>
       </div>
+      
+      <div class="menu-toggle" id="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
       <div class="nav-links" role="navigation" aria-label="Main">
         <a href="#home" class="active">Home</a>
         <a href="#challenge">The Digital Transformation Challenge</a>
@@ -520,6 +641,23 @@
         if(e[0].isIntersecting){ serviceImage.src = images[i % images.length]; }
       }, {threshold:.7, rootMargin:'-20% 0px -60% 0px'});
       obs.observe(step);
+    });
+
+    /* Mobile menu toggle */
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+    
+    mobileMenu.addEventListener('click', function() {
+      this.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+    
+    // Close menu when clicking on a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
     });
 
     /* Reduce motion preference */
