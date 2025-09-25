@@ -6,6 +6,8 @@
   <title>EthernAI — Technology Services</title>
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- N8N Chat CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
   <style>
     :root{
@@ -307,6 +309,61 @@
     .reveal{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease}
     .reveal.show{opacity:1; transform:none}
     
+    /* N8N Chat Widget Styles */
+    #n8n-chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    
+    #n8n-chat-toggle {
+      background: linear-gradient(135deg, var(--accent), var(--accent-weak));
+      color: #0C1220;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      font-weight: 700;
+      font-family: Montserrat;
+      font-size: 14px;
+    }
+    
+    #n8n-chat-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+    
+    #n8n-chat-widget {
+      width: 350px;
+      height: 500px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: var(--bg-dark);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      visibility: hidden;
+    }
+    
+    #n8n-chat-widget.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+    
     /* Mobile styles */
     @media (max-width: 768px) {
       .menu-toggle {
@@ -350,6 +407,17 @@
       .btn {
         width: 100%;
         text-align: center;
+      }
+      
+      #n8n-chat-container {
+        bottom: 10px;
+        right: 10px;
+      }
+      
+      #n8n-chat-widget {
+        width: calc(100vw - 20px);
+        height: 60vh;
+        max-height: 500px;
       }
     }
   </style>
@@ -540,7 +608,7 @@
           <div class="socials">
             <a href="https://www.linkedin.com/company/ethern-ai/" aria-label="LinkedIn" title="LinkedIn">
               <svg class="social-icon" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.920-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
               </svg>
             </a>
             <a href="https://www.instagram.com/ethern_ai?igsh=dmZraW1hYzJhNzAy" aria-label="Instagram" title="Instagram">
@@ -603,6 +671,12 @@
       </div>
     </div>
   </footer>
+
+  <!-- N8N Chat Widget Container -->
+  <div id="n8n-chat-container">
+    <div id="n8n-chat-widget"></div>
+    <button id="n8n-chat-toggle" aria-label="Toggle Chat">Chat</button>
+  </div>
 
   <script>
     /* Year */
@@ -691,6 +765,49 @@
       });
     });
 
+    /* N8N Chat Integration */
+    const chatToggle = document.getElementById('n8n-chat-toggle');
+    const chatWidget = document.getElementById('n8n-chat-widget');
+    let chatInstance = null;
+    
+    // Initialize chat when toggle is clicked
+    chatToggle.addEventListener('click', async () => {
+      if (!chatInstance) {
+        // Import and create chat
+        const { createChat } = await import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js');
+        
+        chatInstance = createChat({
+          webhookUrl: 'https://antoin3ee.app.n8n.cloud/webhook/d0b3a15a-8d1c-437c-8523-00e108af14a4/chat',
+          target: chatWidget,
+          mode: 'bubble',
+          welcomeMessage: 'Hello! How can I help you with EthernAI services today?',
+          theme: {
+            primaryColor: '#007BFF',
+            secondaryColor: '#66AFFF',
+            textColor: '#EDEDED',
+            backgroundColor: '#1E1E1E',
+            borderColor: 'rgba(255,255,255,.08)'
+          }
+        });
+      }
+      
+      // Toggle chat visibility
+      chatWidget.classList.toggle('active');
+      
+      // Update toggle button text
+      chatToggle.textContent = chatWidget.classList.contains('active') ? 'Close' : 'Chat';
+    });
+    
+    // Close chat when clicking outside
+    document.addEventListener('click', (e) => {
+      if (chatWidget.classList.contains('active') && 
+          !chatWidget.contains(e.target) && 
+          !chatToggle.contains(e.target)) {
+        chatWidget.classList.remove('active');
+        chatToggle.textContent = 'Chat';
+      }
+    });
+
     /* Reduce motion preference */
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
       document.querySelectorAll('.trail').forEach(t=>t.remove());
@@ -698,9 +815,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
